@@ -93,6 +93,8 @@ jobs:
             ~/.cargo/.crates.toml
             target
           key: ${{ runner.os }}-aarch64-unknown-linux-gnu-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - name: Install libpq-dev
+        run: apt-get install -y libpq-dev
       - name: Compile
         uses: actions-rs/cargo@v1
         with:
@@ -127,6 +129,8 @@ jobs:
         run: |
           sudo apt-get install -y gcc-powerpc64-linux-gnu
           sudo ln -s /usr/bin/powerpc64-linux-gnu-gcc-7 /usr/bin/powerpc-linux-gnu-gcc
+      - name: Install libpq-dev
+        run: apt-get install -y libpq-dev
       - name: Compile
         uses: actions-rs/cargo@v1
         with:
@@ -154,6 +158,8 @@ jobs:
         with:
           username: rohansircar
           password: ${{ secrets.DOCKER_LOGIN_PASSWORD }}
+      - name: Install libpq-dev
+        run: apt-get install -y libpq-dev
       - name: Compile
         uses: actions-rs/cargo@v1
         with:
