@@ -17,11 +17,10 @@ RUN groupadd $APP_USER \
 COPY ./.env ${APP}/.env
 COPY ./migrations ${APP}/migrations
 COPY ./static ${APP}/static
-COPY ./db/empty.db ${APP}/data/app.db
-COPY ./target/release/actix-demo ${APP}/actix-demo
+COPY ./target/release/actix-demo-postgres ${APP}/actix-demo
 
 RUN chown -R $APP_USER:$APP_USER ${APP}
 
 USER $APP_USER
 WORKDIR ${APP}
-CMD ["./actix-demo"]
+CMD ["./actix-demo-postgres"]
