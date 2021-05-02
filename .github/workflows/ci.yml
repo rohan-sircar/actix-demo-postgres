@@ -99,7 +99,7 @@ jobs:
           use-cross: true
           command: build
           args: --release --target=aarch64-unknown-linux-gnu
-  
+
   build-ppc:
     name: Build PowerPC Binaries
     if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
@@ -132,7 +132,7 @@ jobs:
         with:
           command: build
           args: --release --target=powerpc64-unknown-linux-gnu
-        env: 
+        env:
           RUSTFLAGS: "-C linker=powerpc64-linux-gnu-gcc-7"
 
   publish-docker:
@@ -160,8 +160,8 @@ jobs:
           command: build
           args: --release
       - name: Build Image
-        run: docker build -f ci.Dockerfile -t rohansircar/actix-demo:latest .
-        env: 
+        run: docker build -f ci.Dockerfile -t rohansircar/actix-demo-postgres:latest .
+        env:
           DOCKER_BUILDKIT: 1
       - name: Publish Image
-        run: docker push rohansircar/actix-demo:latest
+        run: docker push rohansircar/actix-demo-postgres:latest

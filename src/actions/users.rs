@@ -6,7 +6,7 @@ use bcrypt::{hash, verify, DEFAULT_COST};
 
 pub fn find_user_by_uid(
     uid: i32,
-    conn: &SqliteConnection,
+    conn: &PgConnection,
 ) -> Result<Option<models::UserDto>, errors::DomainError> {
     use crate::schema::users::dsl::*;
 
@@ -21,7 +21,7 @@ pub fn find_user_by_uid(
 
 pub fn _find_user_by_name(
     user_name: String,
-    conn: &SqliteConnection,
+    conn: &PgConnection,
 ) -> Result<Option<models::UserDto>, errors::DomainError> {
     let maybe_user = query::_get_user_by_name(&user_name)
         .first::<models::UserDto>(conn)
@@ -31,7 +31,7 @@ pub fn _find_user_by_name(
 }
 
 pub fn get_all(
-    conn: &SqliteConnection,
+    conn: &PgConnection,
 ) -> Result<Option<Vec<models::UserDto>>, errors::DomainError> {
     use crate::schema::users::dsl::*;
     Ok(users
@@ -43,7 +43,7 @@ pub fn get_all(
 /// Run query using Diesel to insert a new database row and return the result.
 pub fn insert_new_user(
     nu: models::NewUser,
-    conn: &SqliteConnection,
+    conn: &PgConnection,
 ) -> Result<models::UserDto, errors::DomainError> {
     // It is common when using Diesel with Actix web to import schema-related
     // modules inside a function's scope (rather than the normal module's scope)
@@ -64,7 +64,7 @@ pub fn insert_new_user(
 pub fn verify_password(
     user_name: &str,
     given_password: &str,
-    conn: &SqliteConnection,
+    conn: &PgConnection,
 ) -> Result<bool, errors::DomainError> {
     use crate::schema::users::dsl::*;
     let password_hash = users
@@ -78,14 +78,13 @@ mod query {
     use diesel::prelude::*;
     use diesel::sql_types::Text;
     use diesel::sql_types::Timestamp;
-    use diesel::sqlite::Sqlite;
+    // use diesel::sqlite::Sqlite;
+    use diesel::pg::Pg;
 
     /// <'a, B, T> where a = lifetime, B = Backend, T = SQL data types
     type Query<'a, B, T> = crate::schema::users::BoxedQuery<'a, B, T>;
 
-    pub fn _get_user_by_name(
-        user_name: &str,
-    ) -> Query<Sqlite, (Text, Timestamp)> {
+    pub fn _get_user_by_name(user_name: &str) -> Query<Pg, (Text, Timestamp)> {
         use crate::schema::users::dsl::*;
         users
             .select((name, created_at))

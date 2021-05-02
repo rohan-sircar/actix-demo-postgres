@@ -49,7 +49,7 @@ async fn main() -> std::io::Result<()> {
     // set up database connection pool
     let connspec =
         std::env::var("DATABASE_URL").expect("DATABASE_URL NOT FOUND");
-    let manager = ConnectionManager::<SqliteConnection>::new(connspec);
+    let manager = ConnectionManager::<PgConnection>::new(connspec);
     let pool = r2d2::Pool::builder()
         .build(manager)
         .expect("Failed to create pool.");
